@@ -1,3 +1,61 @@
 <div class="my-5">
-   <h1 class="text-center"><%= title %></h1>
+    <h1 class="text-center">교수관리</h1>
+    <div class="text-end mb-2">
+        <a class="btn btn-primary px-5" href="/haksa/pro/insert">교수등록</a>
+    </div>
+
+    <table id="tbl_professors" class="table table-striped table-hover">
+        <thead class="table-dark"> <tr>
+                <th>교수번호</th>
+                <th>교수이름</th>
+                <th>교수학과</th>
+                <th>교수직급</th>
+                <th>임용일자</th>
+                <th>교수급여</th>
+                <th>데이터삭제</th>
+            </tr>
+        </thead>
+        <tbody id="tbody_professors"></tbody> 
+    </table>
+
+    <script id="temp_professors" type="text/x-handlebars-template">
+        {{#each .}}
+        <tr>
+            <td>{{PCODE}}</td>
+            <td>{{PNAME}}</td>
+            <td>{{DEPT}}</td>
+            <td>{{TITLE}}</td>
+            <td>{{TDATE}}</td>
+            <td>{{TSALARY}}</td>
+            <td><button pcode="{{PCODE}}" class="btn btn-outline-danger btn-sm delete">삭제</button></td>
+        </tr>
+        {{/each}}
+    </script>
 </div>
+
+<script>
+    getList();
+    $("#tbl_professors").on("click", ".delete", function(){
+        const pcode=$(this).attr("pcode");
+        if(confirm("교수번호 "+pcode+" 번 교수를 삭제하실래요?")){
+            $.ajax({
+                type:"post",
+                url:"/haksa/pro/delete",
+                data:{pcode},
+                success:function(){
+                    getList();
+                }
+            });
+        }
+    });
+    function getList() {
+        $.ajax({
+            type: "get",
+            url: "/haksa/pro/list.json",
+            success: function(data) {
+                const temp = Handlebars.compile($("#temp_professors").html());
+               $("#tbl_professors tbody").html(temp(data));
+            }
+        });
+    }
+</script>
