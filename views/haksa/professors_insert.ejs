@@ -4,7 +4,7 @@
         <form class="col-sm-10 col-md-6" name="frm" method="post">
             <div class="input-group mb-2">
                 <span class="input-group-text">교수번호</span>
-                <input name="pcode" class="form-control" disabled value="<%= code %>"> 
+                <input name="pcode" class="form-control" disabled>
             </div>
             <div class="input-group mb-2">
                 <span class="input-group-text">교수이름</span>
@@ -51,15 +51,15 @@
         const salary=$(frm.salary).val();
         const title=$(frm.title).val();
         if(pname==""){
-            alert("등록할 교수 이름 입력!");
+            alert("교수이름 입력 ㄱㄱ");
         }else{
-            if(!confirm("교수등록, 정말로 하십니까?")) return;
+            if(!confirm("교수등록을 정말로 하시렵니까~?")) return;
             $.ajax({
                 type:"post",
                 url:"/haksa/pro/insert",
                 data:{pcode, pname, dept, hiredate, salary, title},
                 success:function(){
-                    alert("교수가 등록되었습니다.");
+                    alert("교수등록 완.");
                     location.href="/haksa/pro";
                 }
             });
