@@ -1,66 +1,77 @@
 <div class="my-5">
-    <h1 class="text-center">교수등록</h1>
+    <h1 class="text-center mb-5">교수등록</h1>
     <div class="row justify-content-center">
-        <form class="col-sm-10 col-md-6" name="frm" method="post">
-            <div class="input-group mb-2">
-                <span class="input-group-text">교수번호</span>
-                <input name="pcode" class="form-control" disabled>
-            </div>
-            <div class="input-group mb-2">
-                <span class="input-group-text">교수이름</span>
-                <input name="pname" class="form-control">
-            </div>
-            <div class="input-group mb-2">
-                <span class="input-group-text">교수학과</span>
-                <select name="dept" class="form-select">
-                    <option>전산</option>
-                    <option>전자</option>
-                    <option>건축</option>
-                </select>
-            </div>
-            <div class="input-group mb-2">
-                <span class="input-group-text">교수직급</span>
-                <select name="title" class="form-select">
-                    <option>정교수</option>
-                    <option>부교수</option>
-                    <option>조교수</option>
-                </select>
-            </div>
-            <div class="input-group mb-2">
-                <span class="input-group-text">임용일자</span>
-                <input name="hiredate" class="form-control" type="date" value="2026-01-01">
-            </div>
-                <div class="input-group mb-2">
-                <span class="input-group-text">교수급여</span>
-                <input name="salary" class="form-control" value="3000000">
-            </div>
-            <div class="text-center mt-3">
-                <button type="submit" class="btn btn-primary px-3">교수등록</button>
-                <button type="reset" class="btn btn-secondary px-3">등록취소</button>
-            </div>
-        </form>
+        <div class="col-12 col-md-10 col-lg-8">
+            <form name="frm">
+                <div class="input-group mb-3">
+                    <span class="input-group-text">교수번호</span>
+                    <input name="pcode" value="<%=code%>" class="form-control" readonly>
+                </div>
+                <div class="input-group mb-3">
+                    <span class="input-group-text">교수이름</span>
+                    <input name="pname" class="form-control" placeholder="교수 이름을 입력하세요">
+                </div>
+                <div class="input-group mb-3">
+                    <span class="input-group-text">교수학과</span>
+                    <select name="dept" class="form-select">
+                        <option value="컴퓨터공학과">컴퓨터공학과</option>
+                        <option value="소프트웨어학과">소프트웨어학과</option>
+                        <option value="정보통신과">정보통신과</option>
+                        <option value="전자공학과">전자공학과</option>
+                    </select>
+                </div>
+                <div class="input-group mb-3">
+                    <span class="input-group-text">임용일자</span>
+                    <input name="hiredate" type="date" class="form-control">
+                </div>
+                <div class="input-group mb-3">
+                    <span class="input-group-text">교수급여</span>
+                    <input name="salary" type="number" class="form-control" placeholder="급여를 입력하세요 (예: 8000000)">
+                </div>
+                <div class="text-center mt-4">
+                    <button type="submit" class="btn btn-primary px-5">저장</button>
+                    <button type="reset" class="btn btn-secondary px-5">취소</button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
+
 <script>
-    $(frm).on("submit", function(e){
+    const form = document.frm;
+    form.hiredate.valueAsDate = new Date();
+
+    $(form).on("submit", function(e){
         e.preventDefault();
-        const pcode=$(frm.pcode).val();
-        const pname=$(frm.pname).val();
-        const dept=$(frm.dept).val();
-        const hiredate=$(frm.hiredate).val();
-        const salary=$(frm.salary).val();
-        const title=$(frm.title).val();
-        if(pname==""){
-            alert("교수이름 입력 ㄱㄱ");
-        }else{
-            if(!confirm("교수등록을 정말로 하시렵니까~?")) return;
+        
+        const pcode = $(form.pcode).val();
+        const pname = $(form.pname).val();
+        const dept = $(form.dept).val();
+        const hiredate = $(form.hiredate).val();
+        const salary = $(form.salary).val();
+
+        if(pname == ""){
+            alert("교수 이름을 입력하세요!");
+            $(form.pname).focus();
+            return;
+        }
+        if(salary == ""){
+            alert("교수 급여를 입력하세요!");
+            $(form.salary).focus();
+            return;
+        }
+
+        if(confirm("교수등록을 하실래요?")){
             $.ajax({
-                type:"post",
-                url:"/haksa/pro/insert",
-                data:{pcode, pname, dept, hiredate, salary, title},
-                success:function(){
-                    alert("교수등록 완.");
-                    location.href="/haksa/pro";
+                type: "post",
+                url: "/haksa/pro/insert", 
+                data: {pcode, pname, dept, hiredate, salary},
+                success: function(){
+                    alert("등록이 완료되었습니다.");
+                    location.href = "/haksa/pro"; 
+                },
+                error: function(){
+                    alert("DB 저장 중 오류가 발생했습니다.");
                 }
             });
         }

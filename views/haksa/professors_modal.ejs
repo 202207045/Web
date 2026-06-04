@@ -48,7 +48,7 @@
     $("#tbl_professors").on("click", "a", function(e){
       e.preventDefault();
       const pcode=$(this).attr("href");
-      $(frm.pcode).val(pcode);
+      $(document.frm.pcode).val(pcode);
       $("#exampleModal").modal("hide");
     })
 </script>

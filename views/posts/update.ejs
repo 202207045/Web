@@ -1,0 +1,40 @@
+<div class="my-5">
+    <h1 class="text-center mb-5">글수정</h1>
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-10 col-lg-8">
+            <form name="frm">
+                <input type="hidden" name="id" value="<%=post.ID%>">
+                <input name="title" value="<%=post.TITLE%>" class="form-control mb-3">
+                <textarea name="content" class="form-control mb-3" rows="10"><%=post.CONTENT%></textarea>
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary px-5">수정완료</button>
+                    <button type="button" class="btn btn-secondary px-5" onClick="history.back()">취소</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(frm).on("submit", function(e){
+        e.preventDefault();
+        const id = $(frm.id).val();
+        const title = $(frm.title).val();
+        const content = $(frm.content).val();
+
+        if(confirm(id + "번 글을 수정하실래요?")){
+            $.ajax({
+                type: "post",
+                url: "/posts/update",
+                data: {id, title, content},
+                success: function(){
+                    alert("수정 성공!.");
+                    location.href = "/posts/" + id;
+                },
+                error: function() {
+                    alert("수정 실패!");
+                }
+            });
+        }
+    });
+</script>
